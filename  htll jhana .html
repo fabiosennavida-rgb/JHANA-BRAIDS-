@@ -1,0 +1,121 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Jhana Braids | Agenda</title>
+<style>
+:root{--p:#5b2d82;--l:#f3ebf9;--g:#c9a227;--ink:#28212e;--m:#716978;--ln:#e5dce9}
+*{box-sizing:border-box}body{margin:0;background:#faf8fb;color:var(--ink);font:15px/1.4 Arial,sans-serif}
+header{background:linear-gradient(135deg,#4a2468,#8d65a8);color:#fff;padding:16px;border-bottom:3px solid var(--g)}
+header h1{margin:0;font-size:22px;letter-spacing:1px}header small{color:#f1e8f7}
+.w{max-width:1000px;margin:auto;padding:12px}.card{background:#fff;border:1px solid var(--ln);border-radius:12px;padding:12px;margin-bottom:12px}
+h2{font-size:17px;color:var(--p);margin:0 0 10px}label{display:block;font-size:12px;font-weight:bold;color:var(--m);margin:8px 0 3px}
+input,select,textarea{width:100%;padding:10px;border:1px solid #d8cddd;border-radius:8px;font:inherit;background:#fff}
+button{border:0;border-radius:9px;padding:10px 13px;background:var(--p);color:#fff;font-weight:bold;cursor:pointer}
+.s{background:var(--l);color:var(--p)}.d{background:#f8e7e7;color:#922}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:12px}.tabs button{background:#fff;color:var(--p);border:1px solid var(--ln)}.tabs .on{background:var(--p);color:#fff}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-bottom:12px}
+.stat{background:#fff;border:1px solid var(--ln);border-radius:12px;padding:10px}.stat b{display:block;font-size:20px;color:var(--p)}.stat span{font-size:11px;color:var(--m)}
+.grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.dow{text-align:center;font-size:11px;font-weight:bold;color:var(--m)}
+.day{border:1px solid var(--ln);border-radius:8px;min-height:56px;padding:5px;cursor:pointer;background:#fff}.day small{display:block;font-size:10px;color:var(--m)}
+.day.on{outline:2px solid var(--p);background:var(--l)}.day.full{border-color:#c88}.day.off{background:#f1eef3;cursor:default;opacity:.5}.day.x{border:0;background:none}
+.b{border:1px solid var(--ln);border-radius:10px;padding:9px;margin-bottom:8px}.b.c{opacity:.5}.m{color:var(--m);font-size:12px}.r{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.gold{color:var(--g);font-weight:bold}.row{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.hide{display:none}
+@media(min-width:800px){.stats{grid-template-columns:repeat(4,1fr)}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}}
+@media print{header,.tabs,form,.row{display:none}}
+</style></head><body>
+<header><div class="w" style="padding:0"><h1>JHANA BRAIDS</h1><small>Agenda coletiva · Cabula VI</small></div></header>
+<div class="w">
+<div id="login" class="card hide"><h2>Entrar</h2>
+<label>E-mail</label><input id="em" type="email" autocomplete="username"><label>Senha</label><input id="pw" type="password" autocomplete="current-password">
+<div class="row"><button id="in">Entrar</button><button class="s" id="up">Criar acesso</button></div>
+<p class="m">Só e-mails liberados pela Jhana conseguem ver a agenda.</p></div>
+<div id="app" class="hide">
+<div class="tabs" id="tabs"></div>
+<div id="v-ag">
+<div class="card"><div class="r"><select id="mon"></select><button class="s" id="out">Sair</button></div></div>
+<div class="stats" id="stats"></div>
+<div class="two"><div class="card"><h2>Calendário</h2><div class="grid" id="cal"></div></div>
+<div class="card"><h2 id="ft">Novo agendamento</h2><form id="f"><input type="hidden" id="id">
+<div class="r"><div><label>Data</label><input type="date" id="dt" required min="2026-11-01" max="2027-12-31"></div><div><label>Status</label><select id="st"><option>Pré-reserva</option><option>Confirmado</option><option>Concluído</option><option>Cancelado</option></select></div></div>
+<div class="r"><div><label>Cliente</label><input id="cn" required list="cl"><datalist id="cl"></datalist></div><div><label>WhatsApp</label><input id="ph" type="tel"></div></div>
+<label>Serviço</label><select id="sv" required></select>
+<div class="r"><div><label>Profissional</label><select id="pr"></select></div><div><label>Início</label><input type="time" id="t0" required min="08:00" max="19:59" value="08:00"></div></div>
+<div class="r"><div><label>Mão de obra (R$)</label><input type="number" id="lb" min="0" step="0.01" value="0"></div><div><label>Material (R$)</label><input type="number" id="mt" min="0" step="0.01" value="0"></div></div>
+<div class="r"><div><label>Sinal (R$)</label><input type="number" id="dp" min="0" step="0.01" value="0"></div><div><label>Sinal</label><select id="dpp"><option value="0">Pendente</option><option value="1">Pago</option></select></div></div>
+<label>Observações</label><input id="nt"><p class="m" id="info"></p>
+<div class="row"><button>Salvar</button><button type="button" class="s" id="clr">Limpar</button></div></form></div></div>
+<div class="card"><h2 id="dh">Dia</h2><div id="dl"></div><div class="row"><button class="s" onclick="print()">Imprimir</button></div></div>
+</div>
+<div id="v-sv" class="hide card"><h2>Serviços e preços</h2><div id="svl"></div><div class="row"><button class="s" id="addsv">+ Novo serviço</button></div></div>
+<div id="v-pr" class="hide card"><h2>Profissionais</h2><div id="prl"></div><div class="row"><button class="s" id="addpr">+ Nova profissional</button></div></div>
+<div id="v-cl" class="hide card"><h2>Clientes e histórico</h2><div id="cll"></div></div>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script>
+const $=i=>document.getElementById(i),esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const R=v=>Number(v||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const MN=["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+const mins=t=>{const[a,b]=t.split(":");return+a*60+ +b},hm=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
+if(!CFG.url.startsWith("https://")){document.body.innerHTML='<div class="w"><div class="card"><h2>Falta configurar</h2>Cole a URL e a chave no arquivo config.js.</div></div>';throw 0}
+const sb=supabase.createClient(CFG.url,CFG.key);
+let P=[],V=[],C=[],B=[],ym="2026-12",sel="2026-12-01",ch;
+const act=b=>b.status!=="Cancelado",tot=b=>+b.labor+ +b.material;
+async function load(){
+ const[a,b,c,d]=await Promise.all([sb.from("professionals").select().order("name"),sb.from("services").select().order("name"),sb.from("clients").select().order("name"),sb.from("bookings").select().gte("date","2026-11-01").lte("date","2027-12-31")]);
+ if(a.error)return alert("Sem acesso: "+a.error.message);
+ P=a.data;V=b.data;C=c.data;B=d.data;draw()}
+function fill(sel_,arr,fn){const v=$(sel_).value;$(sel_).innerHTML=arr.map(fn).join("");if(v)$(sel_).value=v}
+function draw(){
+ fill("sv",V,s=>`<option value="${s.id}">${esc(s.name)} — ${s.hours}h</option>`);
+ fill("pr",P.filter(p=>p.active),p=>`<option value="${p.id}">${esc(p.name)} (a partir de ${p.start_time.slice(0,5)})</option>`);
+ $("cl").innerHTML=C.map(c=>`<option value="${esc(c.name)}">`).join("");
+ const[y,m]=ym.split("-").map(Number),n=new Date(y,m,0).getDate(),off=(new Date(y,m-1,1).getDay()+6)%7;
+ let h=["SEG","TER","QUA","QUI","SEX","SÁB","DOM"].map(x=>`<div class="dow">${x}</div>`).join("")+'<div class="day x"></div>'.repeat(off),work=0;
+ for(let d=1;d<=n;d++){const ds=`${ym}-${String(d).padStart(2,"0")}`,sun=new Date(y,m-1,d).getDay()===0,c=B.filter(b=>b.date===ds&&act(b)).length;
+  if(!sun)work++;h+=sun?`<div class="day off"><b>${d}</b></div>`:`<div class="day${ds===sel?" on":""}${c>=5?" full":""}" data-d="${ds}"><b>${d}</b><small>${c}/5</small></div>`}
+ $("cal").innerHTML=h;
+ const mb=B.filter(b=>b.date.startsWith(ym)&&act(b));
+ $("stats").innerHTML=[[mb.length,"Agendamentos no mês"],[Math.round(mb.length/(work*5)*100)+"%","Ocupação ("+(work*5-mb.length)+" vagas livres)"],[R(mb.reduce((s,b)=>s+tot(b),0)),"Previsto (mão de obra "+R(mb.reduce((s,b)=>s+ +b.labor,0))+" · material "+R(mb.reduce((s,b)=>s+ +b.material,0))+")"],[R(mb.filter(b=>b.deposit_paid).reduce((s,b)=>s+ +b.deposit,0)),"Sinal pago · pendente "+R(mb.filter(b=>!b.deposit_paid).reduce((s,b)=>s+ +b.deposit,0))]].map(x=>`<div class="stat"><b>${x[0]}</b><span>${x[1]}</span></div>`).join("");
+ const dl=B.filter(b=>b.date===sel).sort((a,b)=>a.start_time.localeCompare(b.start_time)),ac=dl.filter(act).length;
+ $("dh").textContent=`${sel.split("-").reverse().join("/")} · ${ac}/5 vagas ocupadas · ${5-ac} livres · dia ${R(dl.filter(act).reduce((s,b)=>s+tot(b),0))}`;
+ $("dl").innerHTML=dl.map(b=>`<div class="b${act(b)?"":" c"}"><b>${b.start_time.slice(0,5)}–${b.end_time.slice(0,5)}</b> · ${esc(b.client_name)}<br><span class="m">${esc(b.service_name)} · ${esc(P.find(p=>p.id===b.professional_id)?.name)} · ${R(tot(b))} (MO ${R(b.labor)} + mat. ${R(b.material)}) · sinal ${R(b.deposit)} ${b.deposit_paid?"pago":"pendente"} · ${b.status}</span><div class="row"><button class="s" data-e="${b.id}">Editar</button><button class="d" data-x="${b.id}">Cancelar</button></div></div>`).join("")||'<p class="m">Nenhum atendimento.</p>';
+ $("svl").innerHTML=V.map(s=>`<div class="b" data-s="${s.id}"><input value="${esc(s.name)}" data-k="name"><div class="r"><div><label>Horas</label><input type="number" step="0.5" value="${s.hours}" data-k="hours"></div><div><label>Mão de obra</label><input type="number" step="0.01" value="${s.labor}" data-k="labor"></div></div><label>Material</label><input type="number" step="0.01" value="${s.material}" data-k="material"><div class="row"><button class="s" data-ss="${s.id}">Salvar</button></div></div>`).join("");
+ $("prl").innerHTML=P.map(p=>`<div class="b" data-p="${p.id}"><input value="${esc(p.name)}" data-k="name"><div class="r"><div><label>Início habitual</label><input type="time" value="${p.start_time.slice(0,5)}" data-k="start_time"></div><div><label>Ativa</label><select data-k="active"><option value="true"${p.active?" selected":""}>Sim</option><option value="false"${p.active?"":" selected"}>Não</option></select></div></div><div class="row"><button class="s" data-ps="${p.id}">Salvar</button></div></div>`).join("");
+ $("cll").innerHTML=C.map(c=>{const hs=B.filter(b=>b.client_id===c.id).sort((a,b)=>b.date.localeCompare(a.date));return`<div class="b"><b>${esc(c.name)}</b> <span class="m">${esc(c.phone||"")} · ${hs.length} atend. · ${R(hs.filter(act).reduce((s,b)=>s+tot(b),0))}</span>${hs.map(b=>`<div class="m">${b.date.split("-").reverse().join("/")} ${esc(b.service_name)} (${b.status})</div>`).join("")}</div>`}).join("")||'<p class="m">Sem clientes.</p>';
+ info()}
+function info(){const s=V.find(x=>x.id===$("sv").value);if(s&&$("t0").value)$("info").textContent=`Duração ${s.hours}h · termina às ${hm(mins($("t0").value)+Math.round(s.hours*60))} (limite 20h)`}
+$("sv").onchange=()=>{const s=V.find(x=>x.id===$("sv").value);if(s&&!$("id").value){$("lb").value=s.labor;$("mt").value=s.material}info()};
+$("pr").onchange=()=>{const p=P.find(x=>x.id===$("pr").value);if(p&&!$("id").value)$("t0").value=p.start_time.slice(0,5);info()};
+$("t0").onchange=info;
+$("f").onsubmit=async e=>{e.preventDefault();
+ const s=V.find(x=>x.id===$("sv").value),d=$("dt").value,t0=mins($("t0").value),t1=t0+Math.round(s.hours*60);
+ if(new Date(d+"T12:00").getDay()===0)return alert("O salão não atende aos domingos.");
+ if(t0<480||t1>1200)return alert("Esse serviço não cabe entre 08h e 20h.");
+ const nm=$("cn").value.trim();let c=C.find(x=>x.name.toLowerCase()===nm.toLowerCase());
+ if(!c){const r=await sb.from("clients").insert({name:nm,phone:$("ph").value}).select().single();if(r.error)return alert(r.error.message);c=r.data}
+ else if($("ph").value&&$("ph").value!==c.phone)await sb.from("clients").update({phone:$("ph").value}).eq("id",c.id);
+ const row={date:d,client_id:c.id,client_name:nm,phone:$("ph").value,service_id:s.id,service_name:s.name,professional_id:$("pr").value,start_time:hm(t0),end_time:hm(t1),labor:+$("lb").value,material:+$("mt").value,deposit:+$("dp").value,deposit_paid:$("dpp").value==="1",status:$("st").value,notes:$("nt").value};
+ const id=$("id").value,r=id?await sb.from("bookings").update(row).eq("id",id):await sb.from("bookings").insert(row);
+ if(r.error)return alert(r.error.code==="23P01"?"Conflito: essa profissional já tem atendimento nesse horário.":r.error.message.includes("DIA_CHEIO")?"Limite de 5 atendimentos neste dia atingido.":r.error.message);
+ sel=d;ym=d.slice(0,7);$("mon").value=ym;clr();load()};
+function clr(){$("f").reset();$("id").value="";$("dt").value=sel;$("ft").textContent="Novo agendamento"}
+$("clr").onclick=clr;
+document.addEventListener("click",async e=>{const t=e.target,g=k=>t.closest("["+k+"]")?.getAttribute(k);
+ if(g("data-d")){sel=g("data-d");$("dt").value=sel;draw()}
+ else if(t.dataset.e){const b=B.find(x=>x.id===t.dataset.e);$("id").value=b.id;$("dt").value=b.date;$("cn").value=b.client_name;$("ph").value=b.phone||"";$("sv").value=b.service_id;$("pr").value=b.professional_id;$("t0").value=b.start_time.slice(0,5);$("lb").value=b.labor;$("mt").value=b.material;$("dp").value=b.deposit;$("dpp").value=b.deposit_paid?"1":"0";$("st").value=b.status;$("nt").value=b.notes||"";$("ft").textContent="Editando agendamento";info();scrollTo(0,0)}
+ else if(t.dataset.x){if(confirm("Cancelar este agendamento?")){await sb.from("bookings").update({status:"Cancelado"}).eq("id",t.dataset.x);load()}}
+ else if(t.dataset.ss||t.dataset.ps){const card=t.closest(".b"),o={};card.querySelectorAll("[data-k]").forEach(i=>o[i.dataset.k]=i.dataset.k==="name"||i.dataset.k==="start_time"?i.value:i.dataset.k==="active"?i.value==="true":+i.value);
+  const r=await sb.from(t.dataset.ss?"services":"professionals").update(o).eq("id",t.dataset.ss||t.dataset.ps);r.error?alert(r.error.message):load()}});
+$("addsv").onclick=async()=>{const n=prompt("Nome do serviço:"),h=+prompt("Duração em horas (ex.: 1.5):");if(n&&h){await sb.from("services").insert({name:n,hours:h});load()}};
+$("addpr").onclick=async()=>{const n=prompt("Nome da profissional:");if(n){await sb.from("professionals").insert({name:n});load()}};
+$("mon").innerHTML=Array.from({length:14},(_,i)=>{const y=2026+Math.floor((10+i)/12),m=(10+i)%12;return`<option value="${y}-${String(m+1).padStart(2,"0")}">${MN[m]} ${y}</option>`}).join("");
+$("mon").value=ym;$("mon").onchange=()=>{ym=$("mon").value;sel=ym+"-01";if(new Date(sel+"T12:00").getDay()===0)sel=ym+"-02";$("dt").value=sel;draw()};
+$("tabs").innerHTML=[["ag","Agenda"],["sv","Serviços"],["pr","Profissionais"],["cl","Clientes"]].map(([k,n],i)=>`<button data-t="${k}" class="${i?"":"on"}">${n}</button>`).join("");
+$("tabs").onclick=e=>{const k=e.target.dataset.t;if(!k)return;["ag","sv","pr","cl"].forEach(x=>$("v-"+x).classList.toggle("hide",x!==k));[...$("tabs").children].forEach(b=>b.classList.toggle("on",b.dataset.t===k))};
+async function auth(){const{data:{session}}=await sb.auth.getSession();$("login").classList.toggle("hide",!!session);$("app").classList.toggle("hide",!session);
+ if(session){$("dt").value=sel;await load();if(!ch)ch=sb.channel("bk").on("postgres_changes",{event:"*",schema:"public",table:"bookings"},load).subscribe()}}
+$("in").onclick=async()=>{const r=await sb.auth.signInWithPassword({email:$("em").value,password:$("pw").value});r.error?alert("Não foi possível entrar: "+r.error.message):auth()};
+$("up").onclick=async()=>{const r=await sb.auth.signUp({email:$("em").value,password:$("pw").value});alert(r.error?r.error.message:"Acesso criado. Se o Supabase pedir, confirme o e-mail; depois clique em Entrar.")};
+$("out").onclick=async()=>{await sb.auth.signOut();location.reload()};
+auth();
+</script></body></html>
